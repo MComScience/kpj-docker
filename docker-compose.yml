@@ -1,0 +1,81 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: docker_nginx
+    restart: always
+    volumes:
+      - ./frontend:/var/www/html
+      - ./nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./logs/nginx:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "80:80"
+      - "8081:8081"
+      - "443:443"
+    networks:
+      - backend
+      - frontend
+
+  db:
+    image: mariadb:latest
+    container_name: docker_mariadb
+    restart: always
+    volumes:
+      - ./mysql/initdb:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_db
+      - MYSQL_DATABASE=kpj-db
+      #- MYSQL_USER=andaman
+      #- MYSQL_PASSWORD=b8888888
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+
+  api:
+    build: ./backend
+    container_name: docker_api
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./logs/api:/usr/src/app/logs
+    environment:
+      - NODE_ENV=production
+
+  web:
+    build: ./frontend
+    container_name: docker_web
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - NODE_ENV=production
+
+  redis:
+    image: redis
+    container_name: docker_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
