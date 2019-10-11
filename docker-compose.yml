@@ -49,8 +49,8 @@ services:
       - ./logs/api:/usr/src/app/logs
     environment:
       - NODE_ENV=production
-    networks:
-      - backend
+    # networks:
+    #   - backend
 
   web:
     build: ./frontend/kpj-frontend
