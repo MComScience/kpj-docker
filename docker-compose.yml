@@ -39,7 +39,7 @@ services:
       - backend
 
   api:
-    build: ./backend
+    build: ./backend/kpj-backend
     container_name: docker_api
     restart: always
     ports:
@@ -51,7 +51,7 @@ services:
       - NODE_ENV=production
 
   web:
-    build: ./frontend
+    build: ./frontend/kpj-frontend
     container_name: docker_web
     restart: always
     ports:
