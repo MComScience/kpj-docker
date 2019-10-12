@@ -43,15 +43,15 @@ services:
     container_name: docker_api
     restart: always
     ports:
-      - "8081:3000"
+      - "3000:3000"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./logs/api:/usr/src/app/logs
     environment:
       - NODE_ENV=production
-    networks:
-      - backend
-      - frontend
+    # networks:
+    #   - backend
+    #   - frontend
 
   web:
     build: ./frontend/kpj-frontend
@@ -74,8 +74,8 @@ services:
       - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
       - /etc/localtime:/etc/localtime:ro
     restart: always
-    networks:
-      - backend
+    # networks:
+    #   - backend
 
 networks:
   frontend:
