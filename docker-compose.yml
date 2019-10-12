@@ -77,8 +77,8 @@ services:
       - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
       - /etc/localtime:/etc/localtime:ro
     restart: always
-    # networks:
-    #   - backend
+    networks:
+      - backend
 
 networks:
   frontend:
