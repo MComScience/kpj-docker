@@ -18,6 +18,9 @@ services:
     networks:
       - backend
       - frontend
+    links:
+      - api
+      - web
 
   db:
     image: mariadb:latest
